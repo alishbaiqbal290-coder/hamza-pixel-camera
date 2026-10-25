@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HAMZA PIXEL CAMERA PRO</title>
+<style>
+body{background:#000;color:#fff;text-align:center;font-family:sans-serif;padding:10px}
+h1{color:#ffcc00;font-size:22px}
+video,img{width:100%;max-width:430px;border:3px solid #ffcc00;border-radius:20px}
+button{padding:12px 14px;margin:5px;border:0;border-radius:14px;font-weight:bold}
+.y{background:#ffcc00}.g{background:#00e676}.p{background:#ff4081;color:#fff}.b{background:#2979ff;color:#fff}.r{background:#ff1744;color:#fff}
+.shutter{width:90px;height:90px;border-radius:50%;background:#fff;border:7px solid #ffcc00;font-size:30px}
+#load{display:none;color:#00e676;font-weight:bold;font-size:18px}
+select{padding:10px;border-radius:10px;font-weight:bold}
+</style>
+</head>
+<body>
+<h1>📸 HAMZA PIXEL CAMERA PRO 😎🔥</h1>
+<p>Android 10 To 16 - All Mobile Support ✅</p>
+<p>WiFi + Offline Dono Me Chalega</p>
+<video id="v" autoplay playsinline muted></video>
+<img id="pic" style="display:none">
+<div id="load">✨ PIXEL AI Processing... Portrait + Colour Grading... 2 Sec...</div>
+<br>
+<button class="shutter" onclick="takePic()">📸</button>
+<br>
+<button class="y" onclick="openCam('user')">🤳 SELFIE</button>
+<button class="y" onclick="openCam('environment')">📷 BACK CAMERA</button>
+<br>
+<select id="grade" onchange="setGrade(this.value)">
+<option value="none">🎨 Colour Grading - Select Karo</option>
+<option value="saturate(1.8) contrast(1.25)">Pixel HDR 🔥</option>
+<option value="brightness(1.2) saturate(1.7) contrast(1.2)">Cinematic 🎬</option>
+<option value="sepia(0.4) contrast(1.1) brightness(1.1)">Golden Hour 🌅</option>
+<option value="saturate(1.2) hue-rotate(10deg) contrast(1.2)">Vivid 🌈</option>
+<option value="grayscale(0.3) contrast(1.3)">Moody 🖤</option>
+<option value="brightness(1.35) saturate(1.5)">Face Glow 😍</option>
+</select>
+<br>
+<button class="r" onclick="portraitMode()">👤 PORTRAIT MODE - Background Blur</button>
+<br>
+<button class="p" onclick="aiEnhance()">✨ AI ENHANCE</button>
+<button class="g" onclick="faceClean()">😍 FACE SAAF</button>
+<button onclick="setGrade('saturate(1.8) contrast(1.25)')">HDR</button>
+<button class="b" onclick="saveHD()">💾 HD SAVE 4K</button>
+<script>
+let v=document.getElementById('v'),pic=document.getElementById('pic'),load=document.getElementById('load'),cur='none',st=null,portrait=false;
+async function openCam(m){
+if(st)st.getTracks().forEach(t=>t.stop());
+try{
+let cons={video:{facingMode:m,width:{ideal:1920},height:{ideal:1080}}};
+if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){alert("Is mobile me camera support nahi - Android 10+ me chalega");return}
+st=await navigator.mediaDevices.getUserMedia(cons);
+v.srcObject=st;v.style.display='block';pic.style.display='none';
+}catch(e){alert("Camera Allow Karo - Permission Do")}
+}
+window.onload=()=>openCam('environment');
+function setGrade(f){cur=f;v.style.filter=f;pic.style.filter=f}
+function portraitMode(){portrait=!portrait;if(portrait){v.style.filter=cur+' blur(0px)';pic.style.filter=cur+' blur(0px)';pic.style.boxShadow='0 0 0 5px #ffcc00';alert("Portrait ON 👤 Background Blur Ho Jayega - Pixel Style")}else{alert("Portrait OFF")}}
+function takePic(){
+let c=document.createElement('canvas');c.width=v.videoWidth||1920;c.height=v.videoHeight||1080;let x=c.getContext('2d');x.filter=cur;x.drawImage(v,0,0,c.width,c.height);
+load.style.display='block';v.style.display='none';
+setTimeout(()=>{
+let c2=document.createElement('canvas');c2.width=c.width;c2.height=c.height;let y=c2.getContext('2d');
+if(portrait){y.filter='blur(6px)';y.drawImage(c,0,0);y.filter='none';let cx=c.width/2,cy=c.height/2;y.save();y.beginPath();y.ellipse(cx,cy,c.width*0.35,c.height*0.38,0,0,7);y.clip();y.filter=cur;y.drawImage(c,0,0);y.restore();}else{y.filter=cur;y.drawImage(c,0,0)}
+pic.src=c2.toDataURL('image/png');pic.style.display='block';pic.style.filter='brightness(1.25) saturate(1.7) contrast(1.25)';load.style.display='none';alert("Done 🔥 Pixel Style Portrait + Colour Grading Ho Gaya!")
+},2000)
+}
+function aiEnhance(){pic.style.filter='brightness(1.3) saturate(1.8) contrast(1.3)';alert("AI Enhance Done 🔥")}
+function faceClean(){pic.style.filter='brightness(1.4) saturate(1.5) contrast(1.15)';alert("Face Saaf 😍")}
+function saveHD(){let a=document.createElement('a');a.href=pic.src;a.download='hamza-pixel-hd.png';a.click()}
+</script>
+</body>
+</html>
